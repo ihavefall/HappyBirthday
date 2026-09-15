@@ -974,14 +974,14 @@ function endGame() {
                     You caught ${score} hearts,
                     but you need 10 to unlock
                     the next page.
-                    Give it another try ♡
+                    Give it another try 
                 </p>
 
                 <button
                     onclick="startGame()"
                     class="game-button"
                 >
-                    Try Again ♡
+                    Try Again 
                 </button>
 
             `;
@@ -1196,4 +1196,4 @@ document.addEventListener(
         }
 
     }
-);
+)
