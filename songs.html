@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Soundtrack.</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="sky-background">
+        <div class="cloud cloud-a"></div>
+        <div class="cloud cloud-c"></div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">for you. ♡</a>
+        <span class="page-number">02 / 06</span>
+    </nav>
+
+
+    <main class="song-page">
+
+        <div class="page-heading">
+            <p>Songs that remind me of you</p>
+
+            <h1>
+                If our story were written as a song,<br>
+                these would be it.
+            </h1>
+        </div>
+
+
+        <div class="record-player">
+
+            <div class="turntable">
+
+                <div class="vinyl" id="vinyl">
+
+                    <div class="vinyl-lines"></div>
+
+                    <div class="record-label">
+                        <span>♡</span>
+                    </div>
+
+                </div>
+
+                <div class="needle">
+                    <div class="needle-head"></div>
+                </div>
+
+            </div>
+
+
+            <div class="music-info">
+
+                <p class="playing-label">
+                    NOW PLAYING
+                </p>
+
+                <h2 id="songTitle">
+                    Song One
+                </h2>
+
+                <p id="songArtist">
+                    A song for you
+                </p>
+
+
+                <div class="music-controls">
+
+                    <button onclick="previousSong()">
+                        ←
+                    </button>
+
+                    <button
+                        class="big-play"
+                        onclick="toggleMusic()"
+                        id="playBtn">
+                        ▶
+                    </button>
+
+                    <button onclick="nextSong()">
+                        →
+                    </button>
+
+                </div>
+
+
+                <div class="track-list">
+
+                    <div class="track active" onclick="selectSong(0)">
+                        <span>01</span>
+
+                        <div>
+                            <strong>Swear It Again </strong>
+                            <small>Westlife</small>
+                        </div>
+                    </div>
+
+
+                    <div class="track" onclick="selectSong(1)">
+                        <span>02</span>
+
+                        <div>
+                            <strong>Best Part Of Me</strong>
+                            <small>Ed Sheeran ft. YEBBA</small>
+                        </div>
+                    </div>
+
+
+                    <div class="track" onclick="selectSong(2)">
+                        <span>03</span>
+
+                        <div>
+                            <strong>Last Night On Earth</strong>
+                            <small>Green Day</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a href="game.html" class="next-page">
+            next page →
+        </a>
+
+    </main>
+
+
+    <audio id="audioPlayer"></audio>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

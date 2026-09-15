@@ -1,0 +1,2229 @@
+/* ========================================
+   RESET
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: "DM Sans", sans-serif;
+
+    color: #183b56;
+
+    background:
+        linear-gradient(
+            180deg,
+            #91d7f7,
+            #d9f3ff 65%,
+            #eefaff
+        );
+
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+/* ========================================
+   SKY BACKGROUND
+======================================== */
+
+.sky-background {
+    position: fixed;
+    inset: 0;
+
+    z-index: -10;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8fd6f7 0%,
+            #c7edff 50%,
+            #eefaff 100%
+        );
+}
+
+.cloud {
+    position: absolute;
+
+    width: 240px;
+    height: 65px;
+
+    border-radius: 100px;
+
+    background: rgba(255,255,255,.62);
+
+    filter: blur(.5px);
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background: inherit;
+}
+
+.cloud::before {
+    width: 100px;
+    height: 100px;
+
+    left: 45px;
+    bottom: 18px;
+}
+
+.cloud::after {
+    width: 75px;
+    height: 75px;
+
+    left: 125px;
+    bottom: 12px;
+}
+
+.cloud-a {
+    top: 18%;
+    left: -100px;
+
+    animation:
+        cloudMove 38s linear infinite;
+}
+
+.cloud-b {
+    top: 52%;
+    right: -120px;
+
+    width: 310px;
+
+    animation:
+        cloudMoveReverse 45s linear infinite;
+}
+
+.cloud-c {
+    top: 78%;
+    left: 10%;
+
+    width: 180px;
+
+    opacity: .4;
+
+    animation:
+        cloudMove 55s linear infinite;
+}
+
+@keyframes cloudMove {
+
+    from {
+        transform: translateX(-20vw);
+    }
+
+    to {
+        transform: translateX(120vw);
+    }
+
+}
+
+@keyframes cloudMoveReverse {
+
+    from {
+        transform: translateX(20vw);
+    }
+
+    to {
+        transform: translateX(-120vw);
+    }
+
+}
+
+
+/* ========================================
+   TYPOGRAPHY
+======================================== */
+
+h1,
+h2,
+h3 {
+    font-family: "Playfair Display", serif;
+
+    font-weight: 500;
+}
+
+.tiny-text {
+    text-transform: uppercase;
+
+    letter-spacing: 4px;
+
+    font-size: 10px;
+
+    opacity: .6;
+}
+
+.page-heading {
+    margin-bottom: 50px;
+}
+
+.page-heading > p:first-child {
+    text-transform: uppercase;
+
+    letter-spacing: 3px;
+
+    font-size: 11px;
+
+    opacity: .6;
+
+    margin-bottom: 20px;
+}
+
+.page-heading h1 {
+    font-size: clamp(45px, 7vw, 75px);
+
+    line-height: .98;
+}
+
+.page-heading small {
+    display: block;
+
+    margin-top: 20px;
+
+    opacity: .55;
+}
+
+.center {
+    text-align: center;
+}
+
+
+/* ========================================
+   NAVIGATION
+======================================== */
+
+nav {
+    position: relative;
+
+    z-index: 20;
+
+    width: 90%;
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 28px 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.logo {
+    font-family: "Playfair Display", serif;
+
+    font-size: 22px;
+
+    font-style: italic;
+}
+
+.page-number {
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    opacity: .5;
+}
+
+
+/* ========================================
+   OPENING PAGE
+======================================== */
+
+.opening-page {
+    min-height: 100vh;
+}
+
+.opening {
+    min-height: calc(100vh - 80px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.opening-heart {
+    margin: 20px 0;
+
+    font-size: 100px;
+
+    color: white;
+
+    animation:
+        floatHeart 4s ease-in-out infinite;
+
+    text-shadow:
+        0 15px 40px rgba(46,130,170,.2);
+}
+
+@keyframes floatHeart {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+}
+
+.opening h1 {
+    font-size: clamp(55px, 8vw, 100px);
+
+    line-height: .9;
+}
+
+.opening-subtitle {
+    margin-top: 30px;
+
+    line-height: 1.8;
+
+    opacity: .65;
+}
+
+.open-button {
+    margin-top: 35px;
+
+    padding: 15px 28px;
+
+    border-radius: 50px;
+
+    background: rgba(255,255,255,.6);
+
+    border: 1px solid rgba(255,255,255,.9);
+
+    box-shadow:
+        0 15px 35px rgba(40,110,150,.1);
+
+    transition: .3s;
+}
+
+.open-button:hover {
+    background: white;
+
+    transform: translateY(-4px);
+}
+
+.scroll-hint {
+    margin-top: 70px;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    opacity: .4;
+}
+
+
+/* ========================================
+   FLOATING HEARTS
+======================================== */
+
+.floating-hearts span {
+    position: fixed;
+
+    color: rgba(255,255,255,.65);
+
+    font-size: 28px;
+
+    animation:
+        floatUp 8s linear infinite;
+}
+
+.floating-hearts span:nth-child(1) {
+    left: 15%;
+    bottom: -30px;
+}
+
+.floating-hearts span:nth-child(2) {
+    left: 70%;
+    bottom: -40px;
+
+    animation-delay: 3s;
+}
+
+.floating-hearts span:nth-child(3) {
+    left: 85%;
+    bottom: -20px;
+
+    animation-delay: 5s;
+}
+
+@keyframes floatUp {
+
+    from {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: .7;
+    }
+
+    100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+
+}
+
+
+/* ========================================
+   LETTER
+======================================== */
+
+.letter-page {
+    min-height: calc(100vh - 90px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 60px 20px;
+}
+
+.letter-paper {
+    width: min(700px, 95%);
+
+    padding: 65px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    box-shadow:
+        0 35px 80px rgba(39,111,150,.13);
+
+    position: relative;
+
+    animation:
+        paperAppear 1s ease;
+}
+
+@keyframes paperAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px) rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+
+}
+
+.paper-decoration {
+    position: absolute;
+
+    top: 25px;
+    right: 30px;
+
+    font-size: 28px;
+
+    color: #68b6dc;
+}
+
+.letter-date {
+    text-transform: uppercase;
+
+    letter-spacing: 3px;
+
+    font-size: 9px;
+
+    opacity: .45;
+}
+
+.letter-paper h1 {
+    font-size: 50px;
+
+    margin: 30px 0;
+}
+
+.letter-content p {
+    line-height: 2;
+
+    opacity: .7;
+
+    margin-bottom: 20px;
+}
+
+.signature {
+    margin-top: 40px;
+
+    font-family: "Playfair Display", serif;
+
+    font-style: italic;
+
+    font-size: 20px;
+}
+
+.next-page {
+    margin-top: 60px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: .65;
+    transition: .3s;
+    
+    /* Tambahkan dua baris ini agar teks ke tengah */
+    display: block;
+    text-align: center;
+}
+
+.next-page:hover {
+    opacity: 1;
+    transform: translateX(5px); /* Efek geser ke kanan saat di-hover tetap jalan */
+}
+
+
+/* ========================================
+   SONG PAGE
+======================================== */
+
+.song-page {
+    width: min(1100px, 90%);
+
+    margin: auto;
+
+    padding: 70px 0 100px;
+}
+
+.record-player {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 70px;
+
+    align-items: center;
+
+    padding: 50px;
+
+    background: rgba(255,255,255,.38);
+
+    border: 1px solid rgba(255,255,255,.75);
+
+    border-radius: 30px;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 30px 70px rgba(35,105,145,.1);
+}
+
+
+/* TURNTABLE */
+
+.turntable {
+    min-height: 430px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.vinyl {
+    width: 340px;
+    height: 340px;
+
+    border-radius: 50%;
+
+    position: relative;
+
+    background:
+        repeating-radial-gradient(
+            circle,
+            #152c39 0px,
+            #152c39 2px,
+            #273e49 3px,
+            #152c39 5px
+        );
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.25);
+}
+
+.vinyl.playing {
+    animation:
+        spin 4s linear infinite;
+}
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+.record-label {
+    position: absolute;
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        radial-gradient(
+            circle,
+            #b7eaff,
+            #5aaed7
+        );
+
+    border: 8px solid #1a303c;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: white;
+
+    font-size: 35px;
+}
+
+.needle {
+    position: absolute;
+
+    width: 7px;
+    height: 165px;
+
+    top: 25px;
+    right: 70px;
+
+    background: #edfaff;
+
+    border-radius: 10px;
+
+    transform:
+        rotate(25deg);
+
+    transform-origin: top;
+
+    box-shadow:
+        2px 3px 12px rgba(0,0,0,.25);
+}
+
+.needle-head {
+    position: absolute;
+
+    bottom: -4px;
+    left: -3px;
+
+    width: 13px;
+    height: 13px;
+
+    border-radius: 50%;
+
+    background: #3e92ba;
+}
+
+
+/* MUSIC INFO */
+
+.playing-label {
+    font-size: 9px;
+text-align: center;
+    letter-spacing: 3px;
+
+    opacity: .5;
+}
+
+.music-info h2 {
+    font-size: 40px;
+text-align: center;
+    margin-top: 8px;
+}
+
+#songArtist {
+    opacity: .55;
+text-align: center;
+    margin-top: 5px;
+}
+
+.music-controls {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    justify-content: center; 
+
+    margin: 30px 0;
+}
+
+.music-controls button {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(24,59,86,.2);
+
+    background: rgba(255,255,255,.4);
+
+    color: #183b56;
+}
+
+.music-controls .big-play {
+    width: 60px;
+    height: 60px;
+}
+
+.music-controls button:hover {
+    background: white;
+
+    transform: scale(1.05);
+}
+
+.track {
+    display: flex;
+
+    gap: 20px;
+
+    padding: 16px 0;
+
+    border-bottom:
+        1px solid rgba(24,59,86,.12);
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.track > span {
+    opacity: .4;
+
+    font-size: 11px;
+}
+
+.track div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.track strong {
+    font-size: 13px;
+}
+
+.track small {
+    font-size: 10px;
+
+    opacity: .5;
+}
+
+.track.active {
+    color: #2185b8;
+}
+
+
+.photos-page {
+    width: min(1100px, 92%);
+
+    margin: auto;
+
+    padding: 0px 0 100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.photo-wall {
+    min-height: 420px;
+    width: 100%;
+    position: relative;
+}
+
+
+.photo-card {
+    position: absolute;
+
+    width: 220px;
+
+    background: white;
+
+    padding: 10px 10px 20px;
+
+    box-shadow:
+        0 20px 40px rgba(38,103,135,.15);
+
+    cursor: pointer;
+
+    transition:
+        transform .4s,
+        z-index .2s;
+
+    animation:
+        photoAppear .8s ease both;
+}
+
+.photo-card img {
+    width: 100%;
+
+    aspect-ratio: 1;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.photo-card p {
+    font-family: "Playfair Display", serif;
+
+    text-align: center;
+
+    margin-top: 12px;
+
+    font-style: italic;
+
+    font-size: 14px;
+}
+
+.photo-card:hover {
+    transform:
+        scale(1.08)
+        rotate(0deg) !important;
+
+    z-index: 10;
+}
+
+.photo-1 {
+    left: 12%;
+    top: 50px;
+
+    transform: rotate(-7deg);
+}
+
+.photo-2 {
+    left: 40%;
+    top: 90px;
+
+    transform: rotate(4deg);
+}
+
+.photo-3 {
+    right: 12%;
+    top: 40px;
+
+    transform: rotate(7deg);
+}
+
+
+/* ONLY affects the There's More position on this photo page */
+
+.photos-page > .next-page {
+    margin-top: 20px;
+    align-self: center;
+}
+
+
+@keyframes photoAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(40px) rotate(0);
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* IMAGE MODAL */
+
+.image-modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(20,60,80,.8);
+
+    backdrop-filter: blur(8px);
+
+    z-index: 100;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+}
+
+.image-modal.show {
+    display: flex;
+}
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 85vh;
+
+    object-fit: contain;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.3);
+}
+
+.image-modal button {
+    position: absolute;
+
+    top: 25px;
+    right: 30px;
+
+    border: none;
+
+    background: none;
+
+    color: white;
+
+    font-size: 35px;
+}
+/* ========================================
+   REASONS
+======================================== */
+
+.reasons-page {
+    width: min(1000px, 90%);
+
+    margin: auto;
+
+    padding: 70px 0 100px;
+}
+
+.reason-clouds {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 40px;
+
+    margin-top: 60px;
+}
+
+.reason-cloud {
+    width: 125px;
+    height: 80px;
+
+    margin: auto;
+
+    border: none;
+
+    position: relative;
+
+    background: white;
+
+    border-radius: 60px;
+
+    box-shadow:
+        0 15px 30px rgba(40,120,160,.12);
+
+    transition: .3s;
+}
+
+.reason-cloud::before,
+.reason-cloud::after {
+    content: "";
+
+    position: absolute;
+
+    background: white;
+
+    border-radius: 50%;
+}
+
+.reason-cloud::before {
+    width: 55px;
+    height: 55px;
+
+    left: 22px;
+    top: -20px;
+}
+
+.reason-cloud::after {
+    width: 45px;
+    height: 45px;
+
+    right: 20px;
+    top: -12px;
+}
+
+.reason-cloud span {
+    position: relative;
+
+    z-index: 3;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color: #3c94bd;
+}
+
+.reason-cloud:hover {
+    transform:
+        translateY(-10px)
+        scale(1.05);
+}
+
+
+/* REASON POPUP */
+
+.reason-popup {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(25,80,105,.35);
+
+    backdrop-filter: blur(8px);
+
+    z-index: 100;
+
+    display: none;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.reason-popup.show {
+    display: flex;
+}
+
+.reason-popup > button {
+    position: absolute;
+
+    top: 25px;
+    right: 30px;
+
+    border: none;
+
+    background: none;
+
+    font-size: 35px;
+
+    color: white;
+}
+
+#reasonNumber {
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    color: white;
+
+    opacity: .7;
+}
+
+.reason-popup h2 {
+    color: white;
+
+    font-size: 55px;
+
+    margin: 20px 0;
+}
+
+.reason-popup p {
+    color: white;
+
+    max-width: 500px;
+
+    line-height: 1.8;
+
+    opacity: .85;
+}
+
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #36536b;
+    overflow-x: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+/* =========================
+   GAME PAGE
+========================= */
+
+.game-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255,255,255,.75),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 10%,
+            rgba(255,255,255,.5),
+            transparent 22%
+        ),
+        linear-gradient(
+            180deg,
+            #a9dcf5 0%,
+            #c5e9f8 45%,
+            #e5f6fc 100%
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    padding: 60px 20px;
+}
+
+
+/* =========================
+   CLOUDS
+========================= */
+
+.cloud {
+    position: fixed;
+
+    background: rgba(255,255,255,.72);
+
+    border-radius: 100px;
+
+    filter: blur(1px);
+
+    z-index: 0;
+
+    pointer-events: none;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+
+    position: absolute;
+
+    background: inherit;
+
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 80px;
+    height: 80px;
+
+    left: 25px;
+    bottom: 0;
+}
+
+.cloud::after {
+    width: 110px;
+    height: 110px;
+
+    right: 25px;
+    bottom: 0;
+}
+
+.cloud-1 {
+    width: 190px;
+    height: 55px;
+
+    top: 12%;
+    left: -30px;
+
+    animation: cloudMove 22s linear infinite;
+}
+
+.cloud-2 {
+    width: 240px;
+    height: 65px;
+
+    top: 65%;
+    right: -80px;
+
+    animation: cloudMoveReverse 28s linear infinite;
+}
+
+.cloud-3 {
+    width: 160px;
+    height: 50px;
+
+    bottom: 8%;
+    left: 15%;
+
+    opacity: .5;
+
+    animation: cloudMove 30s linear infinite;
+}
+
+@keyframes cloudMove {
+
+    0% {
+        transform: translateX(-30px);
+    }
+
+    50% {
+        transform: translateX(80px);
+    }
+
+    100% {
+        transform: translateX(-30px);
+    }
+
+}
+
+@keyframes cloudMoveReverse {
+
+    0% {
+        transform: translateX(40px);
+    }
+
+    50% {
+        transform: translateX(-100px);
+    }
+
+    100% {
+        transform: translateX(40px);
+    }
+
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.game-container {
+    width: min(850px, 100%);
+
+    text-align: center;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.game-header {
+    margin-bottom: 25px;
+}
+
+.tiny-label {
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+    color: #6689a0;
+
+    margin-bottom: 12px;
+}
+
+.game-header h1 {
+    font-size: clamp(36px, 6vw, 58px);
+
+    font-weight: normal;
+
+    color: #31516a;
+
+    margin-bottom: 15px;
+}
+
+.game-intro {
+    max-width: 560px;
+
+    margin: 0 auto 10px;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    color: #54738a;
+}
+
+.game-instruction {
+    font-size: 15px;
+
+    color: #52728a;
+}
+
+
+/* =========================
+   SCORE CARD
+========================= */
+
+.score-card {
+    width: min(430px, 100%);
+
+    margin: 25px auto 18px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 50px;
+
+    background: rgba(255,255,255,.68);
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    border-radius: 20px;
+
+    padding: 16px 25px;
+
+    box-shadow:
+        0 10px 30px rgba(66,119,150,.12);
+
+    backdrop-filter: blur(8px);
+}
+
+.score-item {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 5px;
+}
+
+.score-label {
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color: #7894a7;
+
+    margin-right: 3px;
+}
+
+.score-item > span:nth-child(2) {
+    font-size: 27px;
+
+    color: #365a72;
+}
+
+.score-max {
+    font-size: 12px;
+
+    color: #8aa1b1;
+}
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+.progress-wrapper {
+    width: min(600px, 100%);
+
+    margin: 0 auto 22px;
+}
+
+.progress-text {
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 12px;
+
+    color: #69879a;
+
+    margin-bottom: 7px;
+}
+
+.progress-bar {
+    height: 8px;
+
+    background: rgba(255,255,255,.65);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+#progressFill {
+    width: 0%;
+
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #83bfdc,
+        #6baed0
+    );
+
+    border-radius: 20px;
+
+    transition: width .3s ease;
+}
+
+
+/* =========================
+   GAME AREA
+========================= */
+
+.game-area {
+    width: 100%;
+
+    height: 420px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.32),
+            rgba(255,255,255,.58)
+        );
+
+    border: 1px solid rgba(255,255,255,.75);
+
+    box-shadow:
+        0 20px 50px rgba(53,105,137,.14),
+        inset 0 1px rgba(255,255,255,.8);
+}
+
+
+/* =========================
+   GAME START MESSAGE
+========================= */
+
+.game-message {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(400px, 85%);
+
+    background: rgba(255,255,255,.86);
+
+    padding: 35px 30px;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 15px 40px rgba(58,106,132,.15);
+
+    z-index: 5;
+}
+
+.game-message-icon {
+    font-size: 45px;
+
+    color: #6da9c8;
+
+    margin-bottom: 8px;
+}
+
+.game-message h2 {
+    font-size: 30px;
+
+    font-weight: normal;
+
+    color: #365a72;
+
+    margin-bottom: 12px;
+}
+
+.game-message p {
+    color: #68869a;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   GAME BUTTON
+========================= */
+
+.game-button {
+    border: none;
+
+    background: #6da9c8;
+
+    color: white;
+
+    padding: 13px 27px;
+
+    border-radius: 50px;
+
+    font-size: 14px;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.game-button:hover {
+    transform: translateY(-2px);
+
+    background: #5b99ba;
+
+    box-shadow:
+        0 8px 20px rgba(76,137,169,.25);
+}
+
+.game-button:active {
+    transform: scale(.96);
+}
+
+
+/* =========================
+   FALLING HEARTS
+========================= */
+
+.falling-heart {
+    position: absolute;
+
+    font-size: 30px;
+
+    color: #72afd0;
+
+    user-select: none;
+
+    cursor: pointer;
+
+    z-index: 3;
+
+    animation:
+        heartFall linear forwards,
+        heartFloat 1.2s ease-in-out infinite;
+
+    filter:
+        drop-shadow(
+            0 4px 5px rgba(60,120,150,.18)
+        );
+
+    transition:
+        transform .15s ease;
+}
+
+.falling-heart:hover {
+    transform: scale(1.3);
+}
+
+@keyframes heartFall {
+
+    from {
+        top: -50px;
+    }
+
+    to {
+        top: calc(100% + 50px);
+    }
+
+}
+
+@keyframes heartFloat {
+
+    0% {
+        margin-left: 0;
+    }
+
+    50% {
+        margin-left: 7px;
+    }
+
+    100% {
+        margin-left: 0;
+    }
+
+}
+
+
+/* =========================
+   HEART POP ANIMATION
+========================= */
+
+.heart-pop {
+    animation: heartPop .25s ease forwards !important;
+}
+
+@keyframes heartPop {
+
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.7);
+        opacity: .8;
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================
+   CONTINUE SECTION
+========================= */
+
+.continue-section {
+    margin-top: 25px;
+
+    min-height: 90px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.locked-message {
+    font-size: 13px;
+
+    color: #7893a4;
+
+    margin-bottom: 12px;
+
+    transition: .3s ease;
+}
+
+.reward-button {
+    border: none;
+
+    border-radius: 50px;
+
+    padding: 14px 30px;
+
+    font-size: 14px;
+
+    transition: .3s ease;
+}
+
+.reward-button.locked {
+    background: rgba(255,255,255,.55);
+
+    color: #9aabb6;
+
+    cursor: not-allowed;
+
+    border: 1px solid rgba(255,255,255,.7);
+}
+
+.reward-button.unlocked {
+    background: #5f9fbe;
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(71,126,157,.25);
+
+    animation: unlockPulse 2s infinite;
+}
+
+.reward-button.unlocked:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(71,126,157,.3);
+}
+
+@keyframes unlockPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 8px 25px rgba(71,126,157,.25);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 35px rgba(71,126,157,.45);
+    }
+
+}
+
+
+/* =========================
+   CONGRATS POPUP
+========================= */
+
+.popup-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(35,76,100,.38);
+
+    backdrop-filter: blur(8px);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 100;
+}
+
+.popup-overlay.show {
+    display: flex;
+
+    animation: popupFade .3s ease;
+}
+
+@keyframes popupFade {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+.congrats-popup {
+    width: min(470px, 100%);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.98),
+            rgba(240,249,253,.98)
+        );
+
+    border-radius: 30px;
+
+    padding: 42px 35px;
+
+    text-align: center;
+
+    box-shadow:
+        0 30px 80px rgba(30,76,102,.25);
+
+    animation: popupAppear .45s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes popupAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            scale(.9);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+.popup-heart {
+    font-size: 65px;
+
+    color: #70aece;
+
+    margin-bottom: 5px;
+
+    animation: heartBounce 1.2s ease infinite;
+}
+
+@keyframes heartBounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
+}
+
+.popup-small {
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    color: #7694a6;
+
+    margin-bottom: 12px;
+}
+
+.congrats-popup h2 {
+    font-size: 34px;
+
+    font-weight: normal;
+
+    color: #35576d;
+
+    margin-bottom: 15px;
+}
+
+.congrats-popup > p {
+    font-size: 16px;
+
+    color: #55758a;
+
+    line-height: 1.7;
+}
+
+.popup-message {
+    margin: 15px auto 25px;
+
+    font-size: 14px !important;
+
+    max-width: 350px;
+}
+
+
+/* =========================
+   SUCCESS STATE
+========================= */
+
+.game-complete .game-area {
+    box-shadow:
+        0 20px 60px rgba(72,130,160,.2),
+        inset 0 0 40px rgba(255,255,255,.4);
+}
+
+.game-complete .locked-message {
+    color: #5e91aa;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .game-page {
+        padding: 40px 15px;
+    }
+
+    .game-header h1 {
+        font-size: 39px;
+    }
+
+    .game-intro {
+        font-size: 15px;
+    }
+
+    .score-card {
+        gap: 25px;
+    }
+
+    .game-area {
+        height: 390px;
+    }
+
+    .game-message {
+        padding: 28px 22px;
+    }
+
+    .congrats-popup {
+        padding: 35px 25px;
+    }
+
+    .congrats-popup h2 {
+        font-size: 29px;
+    }
+
+}
+/* ========================================
+   FINAL PAGE
+======================================== */
+
+.final-page {
+    color: #dff5ff;
+
+    background: #102f47;
+}
+
+.night-sky {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -5;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            #2b6688,
+            #102f47 65%
+        );
+}
+
+.moon {
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background: #e9f8ff;
+
+    right: 13%;
+    top: 13%;
+
+    box-shadow:
+        0 0 80px rgba(200,240,255,.35);
+}
+
+.night-stars {
+    position: absolute;
+
+    inset: 0;
+
+    text-align: center;
+
+    padding-top: 8%;
+
+    font-size: 20px;
+
+    line-height: 5;
+
+    color: rgba(255,255,255,.7);
+}
+
+.final-content {
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    z-index: 2;
+
+    padding: 30px;
+}
+
+.final-heart {
+    font-size: 100px;
+
+    margin: 20px;
+
+    animation:
+        floatHeart 4s ease-in-out infinite;
+}
+
+.final-content h1 {
+    font-size: clamp(42px, 7vw, 75px);
+
+    line-height: 1;
+
+    font-weight: 400;
+}
+
+.final-message {
+    font-family: "Playfair Display", serif;
+
+    font-size: 28px;
+
+    font-style: italic;
+
+    margin-top: 30px;
+
+    color: #aee4fa;
+}
+
+.final-small {
+    margin-top: 30px;
+
+    opacity: .6;
+}
+
+.restart-button {
+    margin-top: 45px;
+
+    padding: 13px 25px;
+
+    border: 1px solid rgba(255,255,255,.3);
+
+    border-radius: 50px;
+
+    transition: .3s;
+}
+
+.restart-button:hover {
+    background: rgba(255,255,255,.1);
+
+    transform: translateY(-3px);
+}
+
+.final-footer {
+    position: absolute;
+
+    bottom: 25px;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    opacity: .35;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 800px) {
+
+    nav {
+        padding: 20px 0;
+    }
+
+    .opening h1 {
+        font-size: 55px;
+    }
+
+    .letter-paper {
+        padding: 40px 30px;
+    }
+
+    .letter-paper h1 {
+        font-size: 40px;
+    }
+
+    .record-player {
+        grid-template-columns: 1fr;
+
+        padding: 25px;
+
+        gap: 20px;
+    }
+
+    .turntable {
+        min-height: 350px;
+    }
+
+    .vinyl {
+        width: 270px;
+        height: 270px;
+    }
+
+    .needle {
+        right: 30px;
+    }
+
+    .reason-clouds {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 45px 20px;
+    }
+
+    .photo-wall {
+        min-height: 1050px;
+    }
+
+    .photo-card {
+        width: 160px;
+    }
+
+    .photo-1 {
+        left: 2%;
+        top: 20px;
+    }
+
+    .photo-2 {
+        right: 2%;
+        left: auto;
+        top: 100px;
+    }
+
+    .photo-3 {
+        left: 25%;
+        right: auto;
+        top: 300px;
+    }
+
+    .photo-4 {
+        left: 3%;
+        top: 530px;
+    }
+
+    .photo-5 {
+        left: auto;
+        right: 3%;
+        top: 600px;
+    }
+
+    .photo-6 {
+        left: 25%;
+        right: auto;
+        top: 800px;
+    }
+
+    #gameArea {
+        height: 380px;
+    }
+
+    .moon {
+        width: 120px;
+        height: 120px;
+
+        right: 8%;
+        top: 10%;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .opening h1 {
+        font-size: 47px;
+    }
+
+    .opening-heart {
+        font-size: 75px;
+    }
+
+    .page-heading h1 {
+        font-size: 43px;
+    }
+
+    .vinyl {
+        width: 230px;
+        height: 230px;
+    }
+
+    .record-label {
+        width: 75px;
+        height: 75px;
+    }
+
+    .reason-cloud {
+        width: 110px;
+    }
+
+    .reason-popup h2 {
+        font-size: 40px;
+    }
+
+}

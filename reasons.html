@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>10 Reasons</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="sky-background">
+        <div class="cloud cloud-a"></div>
+        <div class="cloud cloud-b"></div>
+        <div class="cloud cloud-c"></div>
+    </div>
+
+
+    <nav>
+        <a href="index.html" class="logo">for you. ♡</a>
+        <span class="page-number">05 / 06</span>
+    </nav>
+
+
+    <main class="reasons-page">
+
+        <div class="page-heading center">
+
+            <p>you already know this</p>
+
+            <h1>
+                10 reasons<br>
+                why I love you.
+            </h1>
+
+            <small>
+                click the clouds 
+            </small>
+
+        </div>
+
+
+        <div class="reason-clouds">
+
+            <button class="reason-cloud" onclick="showReason(1)">
+                <span>01</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(2)">
+                <span>02</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(3)">
+                <span>03</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(4)">
+                <span>04</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(5)">
+                <span>05</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(6)">
+                <span>06</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(7)">
+                <span>07</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(8)">
+                <span>08</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(9)">
+                <span>09</span>
+            </button>
+
+            <button class="reason-cloud" onclick="showReason(10)">
+                <span>10</span>
+            </button>
+
+        </div>
+
+
+        <div id="reasonPopup" class="reason-popup">
+
+            <button onclick="closeReason()">×</button>
+
+            <span id="reasonNumber">
+                01
+            </span>
+
+            <h2 id="reasonTitle">
+                Your smile.
+            </h2>
+
+            <p id="reasonText">
+                It makes ordinary days feel
+                a little less ordinary.
+            </p>
+
+        </div>
+
+
+        <a href="letter.html" class="next-page">
+            one more thing → 
+        </a>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

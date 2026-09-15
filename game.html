@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="game-page">
+
+    <!-- Floating clouds -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+
+    <main class="game-container">
+
+        <div class="game-header">
+            <p class="tiny-label">YOU UNLOCKED A MINI GAME!</p>
+
+            <h1>Catch the Hearts</h1>
+
+            <p class="game-intro">
+                Before you unlock the next part of this little surprise,
+                I have one tiny challenge for you.
+            </p>
+
+            <p class="game-instruction">
+                Catch <strong>10 hearts</strong> to continue.
+            </p>
+        </div>
+
+        <!-- Score -->
+        <div class="score-card">
+            <div class="score-item">
+                <span class="score-label">HEARTS</span>
+                <span id="score">0</span>
+                <span class="score-max">/ 10</span>
+            </div>
+
+            <div class="score-item">
+                <span class="score-label">TIME</span>
+                <span id="timer">30</span>
+                <span class="score-max">sec</span>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrapper">
+            <div class="progress-text">
+                <span>Your progress</span>
+                <span id="progressText">0 / 10</span>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div id="gameArea" class="game-area">
+
+            <div id="gameMessage" class="game-message">
+                <div class="game-message-icon">♡</div>
+
+                <h2>Ready?</h2>
+
+                <p>
+                    Catch the hearts before time runs out.
+                    You only need 10.
+                </p>
+
+                <button onclick="startGame()" class="game-button">
+                    Start Game 
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Locked Continue -->
+        <div class="continue-section">
+
+            <p id="lockedMessage" class="locked-message">
+                🔒 Complete the game to unlock your reward.
+            </p>
+
+            <button
+                id="continueButton"
+                class="reward-button locked"
+                onclick="goToReward()"
+                disabled
+            >
+                Complete the game first 
+            </button>
+
+        </div>
+
+    </main>
+
+    <!-- Congratulations Popup -->
+    <div id="congratsPopup" class="popup-overlay">
+
+        <div class="congrats-popup">
+
+            <div class="popup-heart">♡</div>
+
+            <p class="popup-small">MISSION COMPLETE</p>
+
+            <h2>Congratulations!</h2>
+
+            <p>
+                You made it to 10 hearts!
+            </p>
+
+            <p class="popup-message">
+                You officially unlocked the next part
+                of the surprise.
+            </p>
+
+            <button onclick="unlockReward()" class="game-button">
+                Continue to your reward
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
