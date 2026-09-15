@@ -12,6 +12,45 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ==========================================
+           PERSISTENT PAGE SHELL
+        ========================================== */
+
+        #pageFrame {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 20;
+            display: none;
+            background: transparent;
+        }
+
+        #openingContent {
+            position: relative;
+            z-index: 10;
+        }
+
+        #musicPlayer {
+            display: none;
+        }
+
+        body.inside-page {
+            overflow: hidden;
+        }
+
+        body.inside-page #openingContent,
+        body.inside-page > .floating-hearts {
+            display: none;
+        }
+
+        body.inside-page #pageFrame {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="opening-page">
@@ -23,11 +62,15 @@
     </div>
 
 
+    <!-- ==========================================
+         ORIGINAL OPENING PAGE
+    =========================================== -->
 
+    <main class="opening" id="openingContent">
 
-    <main class="opening">
-
-        <p class="tiny-text">a little something for you</p>
+        <p class="tiny-text">
+            a little something for you
+        </p>
 
         <div class="opening-heart">
             ♡
@@ -43,10 +86,12 @@
             somewhere between the sky and my heart, happy birthday.
         </p>
 
-
-        <a href="songs.html" class="open-button">
-            open 
-        </a>
+        <button
+            class="open-button"
+            onclick="openWebsite()"
+        >
+            open
+        </button>
 
         <p class="scroll-hint">
             there's a whole little world waiting inside :)
@@ -60,6 +105,592 @@
         <span>♡</span>
         <span>♡</span>
     </div>
+
+
+    <!-- ==========================================
+         ALL OTHER PAGES LOAD INSIDE HERE
+         
+         This iframe stays alive.
+         The music is NOT inside the iframe.
+    =========================================== -->
+
+    <iframe
+        id="pageFrame"
+        src=""
+        title="Website content">
+    </iframe>
+
+
+    <!-- ==========================================
+         PERSISTENT MUSIC PLAYER
+         
+         IMPORTANT:
+         This audio element belongs to index.html
+         and therefore survives page navigation.
+    =========================================== -->
+
+    <audio
+        id="persistentAudio"
+        preload="auto">
+    </audio>
+
+
+    <script>
+
+        /* ==========================================
+           SONGS
+        =========================================== */
+
+        const songs = [
+            {
+                title: "Swear It Again",
+                artist: "Westlife",
+                file: "song1.mp3"
+            },
+            {
+                title: "Best Part Of Me",
+                artist: "Ed Sheeran ft. YEBBA",
+                file: "music/song2.mp3"
+            },
+            {
+                title: "Last Night On Earth",
+                artist: "Green Day",
+                file: "music/song3.mp3"
+            }
+        ];
+
+
+        let currentSong = 0;
+
+        const persistentAudio =
+            document.getElementById("persistentAudio");
+
+
+        /* ==========================================
+           OPEN WEBSITE
+        ========================================== */
+
+        function openWebsite() {
+
+            document.body.classList.add(
+                "inside-page"
+            );
+
+            navigateTo("songs.html");
+
+        }
+
+
+        /* ==========================================
+           NAVIGATE BETWEEN PAGES
+        ========================================== */
+
+        function navigateTo(page) {
+
+            const frame =
+                document.getElementById("pageFrame");
+
+            if (!frame) return;
+
+            frame.src = page;
+
+        }
+
+
+        /* ==========================================
+           MUSIC FUNCTIONS
+        ========================================== */
+
+        function loadMusic(index) {
+
+            if (
+                index < 0 ||
+                index >= songs.length
+            ) {
+                index = 0;
+            }
+
+            currentSong = index;
+
+            persistentAudio.src =
+                songs[index].file;
+
+            persistentAudio.load();
+
+            saveMusicState();
+
+        }
+
+
+        function playMusic() {
+
+            persistentAudio.play()
+                .then(() => {
+
+                    sendMusicState();
+
+                })
+                .catch(error => {
+
+                    console.log(
+                        "Music playback was blocked:",
+                        error
+                    );
+
+                    sendMusicState();
+
+                });
+
+        }
+
+
+        function pauseMusic() {
+
+            persistentAudio.pause();
+
+            sendMusicState();
+
+        }
+
+
+        function togglePersistentMusic() {
+
+            if (
+                persistentAudio.paused
+            ) {
+
+                playMusic();
+
+            } else {
+
+                pauseMusic();
+
+            }
+
+        }
+
+
+        function selectPersistentSong(index) {
+
+            loadMusic(index);
+
+            persistentAudio.currentTime = 0;
+
+            playMusic();
+
+        }
+
+
+        function nextPersistentSong() {
+
+            currentSong++;
+
+            if (
+                currentSong >= songs.length
+            ) {
+                currentSong = 0;
+            }
+
+            loadMusic(currentSong);
+
+            persistentAudio.currentTime = 0;
+
+            playMusic();
+
+        }
+
+
+        function previousPersistentSong() {
+
+            currentSong--;
+
+            if (currentSong < 0) {
+                currentSong = songs.length - 1;
+            }
+
+            loadMusic(currentSong);
+
+            persistentAudio.currentTime = 0;
+
+            playMusic();
+
+        }
+
+
+        /* ==========================================
+           SAVE MUSIC STATE
+        ========================================== */
+
+        function saveMusicState() {
+
+            localStorage.setItem(
+                "savedMusicIndex",
+                currentSong
+            );
+
+            localStorage.setItem(
+                "savedMusicTime",
+                persistentAudio.currentTime || 0
+            );
+
+            localStorage.setItem(
+                "isMusicPlaying",
+                persistentAudio.paused
+                    ? "false"
+                    : "true"
+            );
+
+        }
+
+
+        /* ==========================================
+           SEND MUSIC STATE TO CURRENT PAGE
+        ========================================== */
+
+        function sendMusicState() {
+
+            const frame =
+                document.getElementById(
+                    "pageFrame"
+                );
+
+            if (
+                !frame ||
+                !frame.contentWindow
+            ) {
+                return;
+            }
+
+
+            frame.contentWindow.postMessage(
+                {
+                    type: "musicState",
+
+                    playing:
+                        !persistentAudio.paused,
+
+                    currentSong:
+                        currentSong,
+
+                    currentTime:
+                        persistentAudio.currentTime
+
+                },
+                "*"
+            );
+
+        }
+
+
+        /* ==========================================
+           RECEIVE COMMANDS FROM PAGES
+        ========================================== */
+
+        window.addEventListener(
+            "message",
+            function(event) {
+
+                if (!event.data) return;
+
+
+                switch (
+                    event.data.type
+                ) {
+
+                    case "toggleMusic":
+
+                        togglePersistentMusic();
+
+                        break;
+
+
+                    case "selectSong":
+
+                        selectPersistentSong(
+                            event.data.index
+                        );
+
+                        break;
+
+
+                    case "nextSong":
+
+                        nextPersistentSong();
+
+                        break;
+
+
+                    case "previousSong":
+
+                        previousPersistentSong();
+
+                        break;
+
+
+                    case "requestMusicState":
+
+                        sendMusicState();
+
+                        break;
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           MUSIC EVENTS
+        ========================================== */
+
+        persistentAudio.addEventListener(
+            "timeupdate",
+            function() {
+
+                saveMusicState();
+
+                sendMusicState();
+
+            }
+        );
+
+
+        persistentAudio.addEventListener(
+            "play",
+            function() {
+
+                saveMusicState();
+
+                sendMusicState();
+
+            }
+        );
+
+
+        persistentAudio.addEventListener(
+            "pause",
+            function() {
+
+                saveMusicState();
+
+                sendMusicState();
+
+            }
+        );
+
+
+        persistentAudio.addEventListener(
+            "ended",
+            function() {
+
+                currentSong++;
+
+                if (
+                    currentSong >= songs.length
+                ) {
+
+                    currentSong = 0;
+
+                }
+
+                loadMusic(currentSong);
+
+                persistentAudio.currentTime = 0;
+
+                playMusic();
+
+            }
+        );
+
+
+        /* ==========================================
+           RESTORE SAVED SONG
+           
+           NOTE:
+           We restore the position, but the browser
+           may require a user gesture before playing.
+        ========================================== */
+
+        const savedIndex =
+            localStorage.getItem(
+                "savedMusicIndex"
+            );
+
+        const savedTime =
+            localStorage.getItem(
+                "savedMusicTime"
+            );
+
+
+        if (savedIndex !== null) {
+
+            const index =
+                parseInt(
+                    savedIndex,
+                    10
+                );
+
+
+            const time =
+                parseFloat(
+                    savedTime
+                ) || 0;
+
+
+            if (
+                !isNaN(index) &&
+                index >= 0 &&
+                index < songs.length
+            ) {
+
+                currentSong = index;
+
+                persistentAudio.src =
+                    songs[index].file;
+
+                persistentAudio.addEventListener(
+                    "loadedmetadata",
+                    function restorePosition() {
+
+                        try {
+
+                            persistentAudio.currentTime =
+                                time;
+
+                        } catch (error) {
+
+                            console.log(
+                                "Could not restore position."
+                            );
+
+                        }
+
+                    },
+                    {
+                        once: true
+                    }
+                );
+
+            } else {
+
+                loadMusic(0);
+
+            }
+
+        } else {
+
+            loadMusic(0);
+
+        }
+
+
+        /* ==========================================
+           WHEN A NEW PAGE FINISHES LOADING
+        ========================================== */
+
+        document
+            .getElementById("pageFrame")
+            .addEventListener(
+                "load",
+                function() {
+
+                    sendMusicState();
+
+                    setupPageNavigation();
+
+                }
+            );
+
+
+        /* ==========================================
+           INTERCEPT LINKS INSIDE THE IFRAME
+           
+           This means:
+           
+           songs → game
+           game → photos
+           photos → reasons
+           reasons → letter
+           letter → final
+           
+           all happen INSIDE the iframe.
+           
+           The parent page never reloads.
+        ========================================== */
+
+        function setupPageNavigation() {
+
+            const frame =
+                document.getElementById(
+                    "pageFrame"
+                );
+
+
+            try {
+
+                const frameDocument =
+                    frame.contentDocument ||
+                    frame.contentWindow.document;
+
+
+                const links =
+                    frameDocument.querySelectorAll(
+                        "a[href]"
+                    );
+
+
+                links.forEach(link => {
+
+                    link.addEventListener(
+                        "click",
+                        function(event) {
+
+                            const href =
+                                link.getAttribute(
+                                    "href"
+                                );
+
+
+                            if (
+                                !href ||
+                                href.startsWith("#") ||
+                                href.startsWith("http")
+                            ) {
+                                return;
+                            }
+
+
+                            event.preventDefault();
+
+                            navigateTo(href);
+
+                        }
+                    );
+
+                });
+
+            } catch (error) {
+
+                console.log(
+                    "Could not setup page navigation.",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* ==========================================
+           SAVE BEFORE TAB CLOSE
+        ========================================== */
+
+        window.addEventListener(
+            "beforeunload",
+            saveMusicState
+        );
+
+    </script>
 
 </body>
 </html>
