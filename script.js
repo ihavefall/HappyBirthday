@@ -6,17 +6,17 @@ const songs = [
     {
         title: "Swear It Again",
         artist: "Westlife",
-        file: "music/song1.mp3"
+        file: "song1.mp3"
     },
     {
         title: "Best Part Of Me",
         artist: "Ed Sheeran ft. YEBBA",
-        file: "music/song2.mp3"
+        file: "song2.mp3"
     },
     {
         title: "Last Night On Earth",
         artist: "Green Day",
-        file: "music/song3.mp3"
+        file: "song3.mp3"
     }
 ];
 
