@@ -1,6 +1,6 @@
-/* ========================================
-   MUSIC PLAYER
-======================================== */
+/* =====================================================
+   MUSIC
+===================================================== */
 
 const songs = [
     {
@@ -20,158 +20,306 @@ const songs = [
     }
 ];
 
+
 let currentSong = 0;
 
-const audio = document.getElementById("audioPlayer");
-const vinyl = document.getElementById("vinyl");
-const playBtn = document.getElementById("playBtn");
+const vinyl =
+    document.getElementById("vinyl");
 
-function loadSong(index) {
-    if (!audio) return;
-    
+const playBtn =
+    document.getElementById("playBtn");
+
+
+/* =====================================================
+   SEND COMMAND TO PARENT MUSIC PLAYER
+===================================================== */
+
+function sendMusicCommand(type, index = null) {
+
+    if (window.parent !== window) {
+
+        window.parent.postMessage(
+            {
+                type: type,
+                index: index
+            },
+            "*"
+        );
+
+        return true;
+    }
+
+    return false;
+}
+
+
+/* =====================================================
+   UPDATE MUSIC UI
+===================================================== */
+
+function updateMusicUI(
+    isPlaying,
+    index = currentSong
+) {
+
     currentSong = index;
-    audio.src = songs[index].file;
 
-    const title = document.getElementById("songTitle");
-    const artist = document.getElementById("songArtist");
 
-    if (title) title.textContent = songs[index].title;
-    if (artist) artist.textContent = songs[index].artist;
-
-    document.querySelectorAll(".track").forEach((track, i) => {
-        track.classList.toggle("active", i === index);
-    });
-}
-
-function updateUI(isPlaying) {
     if (vinyl) {
-        if (isPlaying) vinyl.classList.add("playing");
-        else vinyl.classList.remove("playing");
+
+        if (isPlaying) {
+
+            vinyl.classList.add("playing");
+
+        } else {
+
+            vinyl.classList.remove("playing");
+
+        }
+
     }
+
+
     if (playBtn) {
-        playBtn.textContent = isPlaying ? "❚❚" : "▶";
+
+        playBtn.textContent =
+            isPlaying
+                ? "❚❚"
+                : "▶";
+
     }
+
+
+    const title =
+        document.getElementById(
+            "songTitle"
+        );
+
+
+    const artist =
+        document.getElementById(
+            "songArtist"
+        );
+
+
+    if (songs[index]) {
+
+        if (title) {
+
+            title.textContent =
+                songs[index].title;
+
+        }
+
+
+        if (artist) {
+
+            artist.textContent =
+                songs[index].artist;
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll(".track")
+        .forEach((track, i) => {
+
+            track.classList.toggle(
+                "active",
+                i === index
+            );
+
+        });
+
 }
+
+
+/* =====================================================
+   REQUEST MUSIC STATE FROM PARENT
+===================================================== */
+
+function requestMusicState() {
+
+    if (window.parent !== window) {
+
+        window.parent.postMessage(
+            {
+                type: "requestMusicState"
+            },
+            "*"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOGGLE MUSIC
+===================================================== */
 
 function toggleMusic() {
-    if (!audio) return;
 
-    if (audio.paused) {
-        audio.play();
-        updateUI(true);
-    } else {
-        audio.pause();
-        updateUI(false);
-    }
+    sendMusicCommand(
+        "toggleMusic"
+    );
+
 }
+
+
+/* =====================================================
+   SELECT SONG
+===================================================== */
 
 function selectSong(index) {
-    if (!audio) return;
-    loadSong(index);
-    audio.play();
-    updateUI(true);
+
+    sendMusicCommand(
+        "selectSong",
+        index
+    );
+
 }
+
+
+/* =====================================================
+   NEXT SONG
+===================================================== */
 
 function nextSong() {
-    if (!audio) return;
-    currentSong++;
-    if (currentSong >= songs.length) {
-        currentSong = 0;
-    }
-    selectSong(currentSong);
+
+    sendMusicCommand(
+        "nextSong"
+    );
+
 }
+
+
+/* =====================================================
+   PREVIOUS SONG
+===================================================== */
 
 function previousSong() {
-    if (!audio) return;
-    currentSong--;
-    if (currentSong < 0) {
-        currentSong = songs.length - 1;
-    }
-    selectSong(currentSong);
+
+    sendMusicCommand(
+        "previousSong"
+    );
+
 }
 
-/* ========================================
-   CONTINUOUS PLAYBACK LOGIC
-======================================== */
 
-if (audio) {
-    audio.addEventListener("ended", nextSong);
+/* =====================================================
+   RECEIVE MUSIC STATE
+===================================================== */
 
-    // 1. Simpan detik dan status musik setiap kali berputar
-    audio.addEventListener("timeupdate", () => {
-        localStorage.setItem("savedMusicIndex", currentSong);
-        localStorage.setItem("savedMusicTime", audio.currentTime);
-        localStorage.setItem("isMusicPlaying", !audio.paused);
-    });
+window.addEventListener(
+    "message",
+    function(event) {
 
-    // 2. Saat pindah halaman, cek apakah ada musik yang sebelumnya diputar
-    const savedIndex = localStorage.getItem("savedMusicIndex");
-    const savedTime = localStorage.getItem("savedMusicTime");
-    const isPlaying = localStorage.getItem("isMusicPlaying");
+        if (!event.data) return;
 
-    if (savedIndex !== null) {
-        // Lanjutkan dari detik terakhir
-        loadSong(parseInt(savedIndex));
-        audio.currentTime = parseFloat(savedTime);
 
-        // Jika sebelumnya dalam kondisi "Play", otomatis putar lagi
-        if (isPlaying === "true") {
-            audio.play().then(() => {
-                updateUI(true);
-            }).catch(() => {
-                // Catatan: Kadang browser memblokir autoplay jika berpindah halaman terlalu cepat
-                console.log("Autoplay diblokir browser, menunggu interaksi.");
-                updateUI(false);
-            });
-        } else {
-            updateUI(false);
+        if (
+            event.data.type ===
+            "musicState"
+        ) {
+
+            updateMusicUI(
+                event.data.playing,
+                event.data.currentSong
+            );
+
         }
-    } else {
-        // Jika ini halaman pertama kali dibuka
-        loadSong(0);
-    }
-}
 
-/* ========================================
+    }
+);
+
+
+/* =====================================================
+   ASK PARENT FOR CURRENT STATE
+===================================================== */
+
+requestMusicState();
+
+
+/* =====================================================
    PHOTO MODAL
-======================================== */
+===================================================== */
 
 const photos =
-    document.querySelectorAll(".photo-card");
+    document.querySelectorAll(
+        ".photo-card"
+    );
+
 
 const imageModal =
-    document.getElementById("imageModal");
+    document.getElementById(
+        "imageModal"
+    );
+
 
 const modalImage =
-    document.getElementById("modalImage");
+    document.getElementById(
+        "modalImage"
+    );
 
 
 photos.forEach(photo => {
 
-    photo.addEventListener("click", () => {
+    photo.addEventListener(
+        "click",
+        () => {
 
-        const image =
-            photo.querySelector("img");
+            const image =
+                photo.querySelector("img");
 
-        if (!imageModal || !modalImage) return;
 
-        modalImage.src = image.src;
+            if (
+                !imageModal ||
+                !modalImage ||
+                !image
+            ) {
 
-        imageModal.classList.add("show");
+                return;
 
-    });
+            }
+
+
+            modalImage.src =
+                image.src;
+
+
+            imageModal.classList.add(
+                "show"
+            );
+
+        }
+    );
 
 });
 
 
+/* =====================================================
+   CLOSE IMAGE MODAL
+===================================================== */
+
 function closeImage() {
 
     if (imageModal) {
-        imageModal.classList.remove("show");
+
+        imageModal.classList.remove(
+            "show"
+        );
+
     }
 
 }
 
+
+/* =====================================================
+   CLOSE IMAGE MODAL OUTSIDE
+===================================================== */
 
 if (imageModal) {
 
@@ -179,8 +327,13 @@ if (imageModal) {
         "click",
         event => {
 
-            if (event.target === imageModal) {
+            if (
+                event.target ===
+                imageModal
+            ) {
+
                 closeImage();
+
             }
 
         }
@@ -189,10 +342,9 @@ if (imageModal) {
 }
 
 
-
-/* ========================================
+/* =====================================================
    10 REASONS
-======================================== */
+===================================================== */
 
 const reasons = {
 
@@ -249,53 +401,86 @@ const reasons = {
 };
 
 
+/* =====================================================
+   SHOW REASON
+===================================================== */
+
 function showReason(number) {
 
     const popup =
-        document.getElementById("reasonPopup");
+        document.getElementById(
+            "reasonPopup"
+        );
+
 
     const reasonNumber =
-        document.getElementById("reasonNumber");
+        document.getElementById(
+            "reasonNumber"
+        );
+
 
     const reasonTitle =
-        document.getElementById("reasonTitle");
+        document.getElementById(
+            "reasonTitle"
+        );
+
 
     const reasonText =
-        document.getElementById("reasonText");
+        document.getElementById(
+            "reasonText"
+        );
 
 
     if (!popup) return;
 
 
     reasonNumber.textContent =
-        String(number).padStart(2, "0");
+        String(number).padStart(
+            2,
+            "0"
+        );
+
 
     reasonTitle.textContent =
         reasons[number].title;
+
 
     reasonText.textContent =
         reasons[number].text;
 
 
-    popup.classList.add("show");
+    popup.classList.add(
+        "show"
+    );
+
 }
 
+
+/* =====================================================
+   CLOSE REASON
+===================================================== */
 
 function closeReason() {
 
     const popup =
-        document.getElementById("reasonPopup");
+        document.getElementById(
+            "reasonPopup"
+        );
+
 
     if (popup) {
-        popup.classList.remove("show");
+
+        popup.classList.remove(
+            "show"
+        );
+
     }
 
 }
 
 
-
 /* =====================================================
-   GLOBAL VARIABLES
+   GAME
 ===================================================== */
 
 let score = 0;
@@ -312,26 +497,61 @@ let heartSpawner = null;
 
 
 /* =====================================================
-   ELEMENTS
+   GAME ELEMENTS
 ===================================================== */
 
-const scoreElement = document.getElementById("score");
+const scoreElement =
+    document.getElementById(
+        "score"
+    );
 
-const timerElement = document.getElementById("timer");
 
-const progressFill = document.getElementById("progressFill");
+const timerElement =
+    document.getElementById(
+        "timer"
+    );
 
-const progressText = document.getElementById("progressText");
 
-const gameArea = document.getElementById("gameArea");
+const progressFill =
+    document.getElementById(
+        "progressFill"
+    );
 
-const gameMessage = document.getElementById("gameMessage");
 
-const congratsPopup = document.getElementById("congratsPopup");
+const progressText =
+    document.getElementById(
+        "progressText"
+    );
 
-const continueButton = document.getElementById("continueButton");
 
-const lockedMessage = document.getElementById("lockedMessage");
+const gameArea =
+    document.getElementById(
+        "gameArea"
+    );
+
+
+const gameMessage =
+    document.getElementById(
+        "gameMessage"
+    );
+
+
+const congratsPopup =
+    document.getElementById(
+        "congratsPopup"
+    );
+
+
+const continueButton =
+    document.getElementById(
+        "continueButton"
+    );
+
+
+const lockedMessage =
+    document.getElementById(
+        "lockedMessage"
+    );
 
 
 /* =====================================================
@@ -340,16 +560,32 @@ const lockedMessage = document.getElementById("lockedMessage");
 
 function updateScore() {
 
-    scoreElement.textContent = score;
+    if (scoreElement) {
 
-    progressText.textContent =
-        `${score} / ${MAX_SCORE}`;
+        scoreElement.textContent =
+            score;
 
-    const percentage =
-        (score / MAX_SCORE) * 100;
+    }
 
-    progressFill.style.width =
-        `${percentage}%`;
+
+    if (progressText) {
+
+        progressText.textContent =
+            `${score} / ${MAX_SCORE}`;
+
+    }
+
+
+    if (progressFill) {
+
+        const percentage =
+            (score / MAX_SCORE) * 100;
+
+
+        progressFill.style.width =
+            `${percentage}%`;
+
+    }
 
 }
 
@@ -360,71 +596,126 @@ function updateScore() {
 
 function startGame() {
 
-    // Reset values
     score = 0;
 
     timeLeft = 30;
 
     gameRunning = true;
 
+
     updateScore();
 
-    timerElement.textContent = timeLeft;
 
-    // Hide starting message
-    gameMessage.style.display = "none";
+    if (timerElement) {
 
-    // Disable continue button
-    continueButton.disabled = true;
+        timerElement.textContent =
+            timeLeft;
 
-    continueButton.classList.remove("unlocked");
+    }
 
-    continueButton.classList.add("locked");
 
-    continueButton.textContent =
-        "Complete the game first ♡";
+    if (gameMessage) {
 
-    lockedMessage.textContent =
-        "🔒 Catch 10 hearts to unlock your reward.";
+        gameMessage.style.display =
+            "none";
 
-    // Remove any old hearts
+    }
+
+
+    if (continueButton) {
+
+        continueButton.disabled =
+            true;
+
+        continueButton.classList.remove(
+            "unlocked"
+        );
+
+        continueButton.classList.add(
+            "locked"
+        );
+
+        continueButton.textContent =
+            "Complete the game first ♡";
+
+    }
+
+
+    if (lockedMessage) {
+
+        lockedMessage.textContent =
+            "🔒 Catch 10 hearts to unlock your reward.";
+
+    }
+
+
     document
-        .querySelectorAll(".falling-heart")
-        .forEach(heart => heart.remove());
+        .querySelectorAll(
+            ".falling-heart"
+        )
+        .forEach(heart => {
 
-    // Start timer
-    clearInterval(gameTimer);
+            heart.remove();
 
-    gameTimer = setInterval(() => {
+        });
 
-        timeLeft--;
 
-        timerElement.textContent = timeLeft;
+    clearInterval(
+        gameTimer
+    );
 
-        if (timeLeft <= 0) {
 
-            clearInterval(gameTimer);
+    gameTimer =
+        setInterval(
+            () => {
 
-            endGame();
+                timeLeft--;
 
-        }
 
-    }, 1000);
+                if (timerElement) {
 
-    // Start creating hearts
-    clearInterval(heartSpawner);
+                    timerElement.textContent =
+                        timeLeft;
+
+                }
+
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(
+                        gameTimer
+                    );
+
+                    endGame();
+
+                }
+
+            },
+            1000
+        );
+
+
+    clearInterval(
+        heartSpawner
+    );
+
 
     createHeart();
 
-    heartSpawner = setInterval(() => {
 
-        if (gameRunning) {
+    heartSpawner =
+        setInterval(
+            () => {
 
-            createHeart();
+                if (gameRunning) {
 
-        }
+                    createHeart();
 
-    }, 700);
+                }
+
+            },
+            700
+        );
 
 }
 
@@ -439,57 +730,84 @@ function createHeart() {
 
     if (score >= MAX_SCORE) return;
 
-    const heart = document.createElement("div");
+    if (!gameArea) return;
 
-    heart.classList.add("falling-heart");
 
-    heart.textContent = "♡";
+    const heart =
+        document.createElement(
+            "div"
+        );
 
-    // Random horizontal position
+
+    heart.classList.add(
+        "falling-heart"
+    );
+
+
+    heart.textContent =
+        "♡";
+
+
     const maxLeft =
-        gameArea.clientWidth - 40;
+        Math.max(
+            gameArea.clientWidth - 40,
+            0
+        );
+
 
     const randomLeft =
         Math.random() * maxLeft;
 
+
     heart.style.left =
         `${randomLeft}px`;
 
-    // Random size
+
     const randomSize =
         22 + Math.random() * 18;
+
 
     heart.style.fontSize =
         `${randomSize}px`;
 
-    // Random falling speed
+
     const duration =
         2.5 + Math.random() * 2;
+
 
     heart.style.animationDuration =
         `${duration}s, 1.2s`;
 
-    // Click heart
-    heart.addEventListener("click", () => {
 
-        if (!gameRunning) return;
+    heart.addEventListener(
+        "click",
+        () => {
 
-        catchHeart(heart);
+            if (!gameRunning) return;
 
-    });
-
-    gameArea.appendChild(heart);
-
-    // Remove after animation
-    setTimeout(() => {
-
-        if (heart.parentElement) {
-
-            heart.remove();
+            catchHeart(heart);
 
         }
+    );
 
-    }, duration * 1000);
+
+    gameArea.appendChild(
+        heart
+    );
+
+
+    setTimeout(
+        () => {
+
+            if (heart.parentElement) {
+
+                heart.remove();
+
+            }
+
+        },
+        duration * 1000
+    );
 
 }
 
@@ -502,28 +820,36 @@ function catchHeart(heart) {
 
     if (!gameRunning) return;
 
-    // Prevent double click
-    heart.style.pointerEvents = "none";
 
-    // Increase score
+    heart.style.pointerEvents =
+        "none";
+
+
     score++;
+
 
     updateScore();
 
-    // Pop animation
-    heart.classList.add("heart-pop");
 
-    setTimeout(() => {
+    heart.classList.add(
+        "heart-pop"
+    );
 
-        if (heart.parentElement) {
 
-            heart.remove();
+    setTimeout(
+        () => {
 
-        }
+            if (heart.parentElement) {
 
-    }, 250);
+                heart.remove();
 
-    // Check if player reached 10
+            }
+
+        },
+        250
+    );
+
+
     if (score >= MAX_SCORE) {
 
         completeGame();
@@ -541,35 +867,61 @@ function completeGame() {
 
     gameRunning = false;
 
-    clearInterval(gameTimer);
 
-    clearInterval(heartSpawner);
+    clearInterval(
+        gameTimer
+    );
 
-    // Remove remaining hearts
+
+    clearInterval(
+        heartSpawner
+    );
+
+
     document
-        .querySelectorAll(".falling-heart")
+        .querySelectorAll(
+            ".falling-heart"
+        )
         .forEach(heart => {
 
             heart.remove();
 
         });
 
-    // Make sure score is exactly 10
+
     score = MAX_SCORE;
+
 
     updateScore();
 
-    timerElement.textContent = "✓";
 
-    // Add completed class
-    document.body.classList.add("game-complete");
+    if (timerElement) {
 
-    // Show congratulations popup
-    setTimeout(() => {
+        timerElement.textContent =
+            "✓";
 
-        congratsPopup.classList.add("show");
+    }
 
-    }, 350);
+
+    document.body.classList.add(
+        "game-complete"
+    );
+
+
+    if (congratsPopup) {
+
+        setTimeout(
+            () => {
+
+                congratsPopup.classList.add(
+                    "show"
+                );
+
+            },
+            350
+        );
+
+    }
 
 }
 
@@ -582,39 +934,71 @@ function endGame() {
 
     gameRunning = false;
 
-    clearInterval(gameTimer);
 
-    clearInterval(heartSpawner);
+    clearInterval(
+        gameTimer
+    );
+
+
+    clearInterval(
+        heartSpawner
+    );
+
 
     document
-        .querySelectorAll(".falling-heart")
-        .forEach(heart => heart.remove());
+        .querySelectorAll(
+            ".falling-heart"
+        )
+        .forEach(heart => {
+
+            heart.remove();
+
+        });
+
 
     if (score < MAX_SCORE) {
 
-        gameMessage.innerHTML = `
-            <div class="game-message-icon">♡</div>
+        if (gameMessage) {
 
-            <h2>Almost there!</h2>
+            gameMessage.innerHTML = `
 
-            <p>
-                You caught ${score} hearts,
-                but you need 10 to unlock the next page.
-                Give it another try ♡
-            </p>
+                <div class="game-message-icon">
+                    ♡
+                </div>
 
-            <button
-                onclick="startGame()"
-                class="game-button"
-            >
-                Try Again ♡
-            </button>
-        `;
+                <h2>
+                    Almost there!
+                </h2>
 
-        gameMessage.style.display = "block";
+                <p>
+                    You caught ${score} hearts,
+                    but you need 10 to unlock
+                    the next page.
+                    Give it another try ♡
+                </p>
 
-        lockedMessage.textContent =
-            "🔒 You need 10 hearts to unlock your reward.";
+                <button
+                    onclick="startGame()"
+                    class="game-button"
+                >
+                    Try Again ♡
+                </button>
+
+            `;
+
+
+            gameMessage.style.display =
+                "block";
+
+        }
+
+
+        if (lockedMessage) {
+
+            lockedMessage.textContent =
+                "🔒 You need 10 hearts to unlock your reward.";
+
+        }
 
     }
 
@@ -627,35 +1011,66 @@ function endGame() {
 
 function unlockReward() {
 
-    congratsPopup.classList.remove("show");
+    if (congratsPopup) {
 
-    continueButton.disabled = false;
+        congratsPopup.classList.remove(
+            "show"
+        );
 
-    continueButton.classList.remove("locked");
+    }
 
-    continueButton.classList.add("unlocked");
 
-    continueButton.textContent =
-        "Continue to your reward!";
+    if (continueButton) {
 
-    lockedMessage.textContent =
-        "✨ You did it! The next part is yours.";
+        continueButton.disabled =
+            false;
 
-    // Small delay so popup closes before button changes
-    setTimeout(() => {
 
-        continueButton.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        continueButton.classList.remove(
+            "locked"
+        );
 
-    }, 200);
+
+        continueButton.classList.add(
+            "unlocked"
+        );
+
+
+        continueButton.textContent =
+            "Continue to your reward!";
+
+    }
+
+
+    if (lockedMessage) {
+
+        lockedMessage.textContent =
+            "✨ You did it! The next part is yours.";
+
+    }
+
+
+    setTimeout(
+        () => {
+
+            if (continueButton) {
+
+                continueButton.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }
+
+        },
+        200
+    );
 
 }
 
 
 /* =====================================================
-   GO TO NEXT PAGE
+   GO TO REWARD
 ===================================================== */
 
 function goToReward() {
@@ -666,61 +1081,119 @@ function goToReward() {
 
     }
 
-    /*
-        Change this filename if you want
-        the reward to be a different page.
 
-        Example:
-        photos.html
-        reasons.html
-        final.html
+    /*
+       Because game.html is inside the iframe,
+       this navigation stays inside the iframe.
+
+       The music player in index.html
+       continues playing.
     */
 
-    window.location.href = "photos.html";
+    if (
+        window.parent !== window
+    ) {
+
+        window.parent.postMessage(
+            {
+                type: "navigate",
+                page: "photos.html"
+            },
+            "*"
+        );
+
+    } else {
+
+        window.location.href =
+            "photos.html";
+
+    }
 
 }
 
 
 /* =====================================================
-   CLOSE POPUP IF CLICKING OUTSIDE
+   HANDLE PARENT NAVIGATION
 ===================================================== */
 
-congratsPopup.addEventListener("click", function(event) {
+window.addEventListener(
+    "message",
+    function(event) {
 
-    if (event.target === congratsPopup) {
+        if (!event.data) return;
 
-        // Don't let her accidentally skip
-        // the congratulations/reward step.
 
-        return;
+        if (
+            event.data.type ===
+            "musicState"
+        ) {
+
+            updateMusicUI(
+                event.data.playing,
+                event.data.currentSong
+            );
+
+        }
 
     }
+);
 
-});
+
+/* =====================================================
+   CONGRATULATIONS POPUP
+===================================================== */
+
+if (congratsPopup) {
+
+    congratsPopup.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                congratsPopup
+            ) {
+
+                return;
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =====================================================
    KEYBOARD SUPPORT
 ===================================================== */
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-    // Press Enter to start if the game hasn't started
-    if (
-        event.key === "Enter" &&
-        !gameRunning &&
-        score < MAX_SCORE
-    ) {
+        if (
+            event.key === "Enter" &&
+            !gameRunning &&
+            score < MAX_SCORE
+        ) {
 
-        const startButton =
-            gameMessage.querySelector("button");
+            if (!gameMessage) return;
 
-        if (startButton) {
 
-            startGame();
+            const startButton =
+                gameMessage.querySelector(
+                    "button"
+                );
+
+
+            if (startButton) {
+
+                startGame();
+
+            }
 
         }
 
     }
-
-});
+);
