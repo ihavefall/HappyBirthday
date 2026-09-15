@@ -135,7 +135,7 @@
     </audio>
 
 
-    <script>
+   <script>
 
         /* ==========================================
            SONGS
@@ -150,12 +150,12 @@
             {
                 title: "Best Part Of Me",
                 artist: "Ed Sheeran ft. YEBBA",
-                file: "music/song2.mp3"
+                file: "song2.mp3"
             },
             {
                 title: "Last Night On Earth",
                 artist: "Green Day",
-                file: "music/song3.mp3"
+                file: "song3.mp3"
             }
         ];
 
@@ -433,6 +433,18 @@
 
                         break;
 
+
+                    /* ==========================================
+                       BAGIAN YANG BARU DITAMBAHKAN
+                    ========================================== */
+                    case "navigate":
+
+                        navigateTo(
+                            event.data.page
+                        );
+
+                        break;
+
                 }
 
             }
@@ -505,10 +517,6 @@
 
         /* ==========================================
            RESTORE SAVED SONG
-           
-           NOTE:
-           We restore the position, but the browser
-           may require a user gesture before playing.
         ========================================== */
 
         const savedIndex =
@@ -604,18 +612,6 @@
 
         /* ==========================================
            INTERCEPT LINKS INSIDE THE IFRAME
-           
-           This means:
-           
-           songs → game
-           game → photos
-           photos → reasons
-           reasons → letter
-           letter → final
-           
-           all happen INSIDE the iframe.
-           
-           The parent page never reloads.
         ========================================== */
 
         function setupPageNavigation() {
@@ -691,6 +687,3 @@
         );
 
     </script>
-
-</body>
-</html>
